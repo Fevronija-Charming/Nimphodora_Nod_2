@@ -318,11 +318,11 @@ async def main():
             channel.queue_declare(queue='PLATOKY2', durable=False)
             channel.basic_consume(on_message_callback=process_message, queue='PLATOKY2')
             channel.start_consuming()
-            async with broker:
-                await broker.start()
-                await Bot.set_my_commands(commands=private, scope=types.BotCommandScopeAllPrivateChats())
-                await Bot.delete_webhook(drop_pending_updates=True)
-                await dp.start_polling(Bot)
+    async with broker:
+        await broker.start()
+        await Bot.set_my_commands(commands=private, scope=types.BotCommandScopeAllPrivateChats())
+        await Bot.delete_webhook(drop_pending_updates=True)
+        await dp.start_polling(Bot)
         
 if __name__ == "__main__":
     asyncio.run(main())
