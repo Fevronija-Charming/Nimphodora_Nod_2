@@ -311,6 +311,7 @@ def process_message(channel,method,properties,body):
     print(channel)
     print(method)
     channel.basic_ack(delivery_tag=method.delivery_tag)
+    return None
 async def main():
     with get_connection() as connection:
         with connection.channel() as channel:
