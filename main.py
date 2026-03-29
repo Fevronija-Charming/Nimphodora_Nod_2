@@ -300,6 +300,10 @@ async def proverka_zapisi(message: types.Message):
         fakt_zapisi=0
         id_zapisi=id_zapisi+1
         await message.answer(text="Запись успешно внесена")
+@dp.message((F.text.lower() == "/krolik"))
+@dp.message((F.text.lower() == "КРОЛИК"))
+async def krolik(message: types.Message,krolik: broker):
+    await krolik.publish(message="krolik", queue="UROKI")
 async def main():
     async with broker:
         await broker.start()
