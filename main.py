@@ -1,4 +1,5 @@
 import os
+import pika
 from tokenize import String
 from dotenv import find_dotenv, load_dotenv
 load_dotenv(find_dotenv())
@@ -6,8 +7,12 @@ import asyncio
 TOKEN_API_KEY=os.getenv("TOKEN_API_KEY")
 bot_id=os.getenv("bot_id")
 moi_id=os.getenv("moi_id")
+#брокер
 from faststream.rabbit import RabbitBroker
 broker=RabbitBroker(url=os.getenv("CLOUDAMQP_URL"))
+connection_params = pika.URLParameters(os.getenv("CLOUDAMQP_URL"))
+def get_connection():
+    return pika.BlockingConnection(parameters=connection_params)
 @broker.subscriber("PLATOKY")
 async def get_platky_fromFASTAPI(data: str):
     await Bot.send_message(chat_id=os.getenv('MYUSERID'),text='ФЕВРОНИЯ СООБЩАЕТ')
@@ -300,15 +305,22 @@ async def proverka_zapisi(message: types.Message):
         fakt_zapisi=0
         id_zapisi=id_zapisi+1
         await message.answer(text="Запись успешно внесена")
-@dp.message((F.text.lower() == "/krolik"))
-@dp.message((F.text.lower() == "КРОЛИК"))
-async def krolik(message: types.Message,krolik: broker):
-    await krolik.publish(message="krolik", queue="UROKI")
+def process_message(channel,method,properties,body,Bot:Bot):
+    Bot.send_message(chat_id=os.getenv('MYUSERID'),text=channel)
+    Bot.send_message(chat_id=os.getenv('MYUSERID'), text=method)
+    Bot.send_message(chat_id=os.getenv('MYUSERID'), text=body)
+    Bot.send_message(chat_id=os.getenv('MYUSERID'), text=properties)
 async def main():
-    async with broker:
-        await broker.start()
-        await Bot.set_my_commands(commands=private, scope=types.BotCommandScopeAllPrivateChats())
-        await Bot.delete_webhook(drop_pending_updates=True)
-        await dp.start_polling(Bot)
+    with get_connection() as connection:
+        with connection.channel() as channel:
+            channel.queue_declare(queue='PLATOKY2', durable=True)
+            channel.basic_consume
+            on_message_callback_query(on_message_callback=process_message, queue='PLATOKY2', no_ack=True)
+            channel.start_consuming()
+            async with broker:
+                await broker.start()
+                await Bot.set_my_commands(commands=private, scope=types.BotCommandScopeAllPrivateChats())
+                await Bot.delete_webhook(drop_pending_updates=True)
+                await dp.start_polling(Bot)
 if __name__ == "__main__":
     asyncio.run(main())
