@@ -317,10 +317,10 @@ async def main():
         await Bot.set_my_commands(commands=private, scope=types.BotCommandScopeAllPrivateChats())
         await Bot.delete_webhook(drop_pending_updates=True)
         await dp.start_polling(Bot)
-    with get_connection() as connection:
-        with connection.channel() as channel:
-            channel.queue_declare(queue='PLATOKY2', durable=False)
-            channel.basic_consume(on_message_callback=process_message, queue='PLATOKY2')
-            channel.start_consuming()
+        with get_connection() as connection:
+            with connection.channel() as channel:
+                channel.queue_declare(queue='PLATOKY2', durable=False)
+                channel.basic_consume(on_message_callback=process_message, queue='PLATOKY2')
+                channel.start_consuming()
 if __name__ == "__main__":
     asyncio.run(main())
