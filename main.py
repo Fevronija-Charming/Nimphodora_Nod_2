@@ -312,7 +312,7 @@ def process_message(channel,method,properties,body):
     print(method)
     channel.basic_ack(delivery_tag=method.delivery_tag)
     return None
-def broker():
+def krolik():
     with get_connection() as connection:
         with connection.channel() as channel:
             channel.queue_declare(queue='PLATOKY2', durable=False)
@@ -326,4 +326,4 @@ async def main():
         await dp.start_polling(Bot) 
 if __name__ == "__main__":
     asyncio.run(main())
-    broker()
+    krolik()
