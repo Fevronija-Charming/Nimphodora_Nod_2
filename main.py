@@ -310,6 +310,7 @@ def process_message(channel,method,properties,body,Bot:Bot):
     Bot.send_message(chat_id=os.getenv('MYUSERID'), text=method)
     Bot.send_message(chat_id=os.getenv('MYUSERID'), text=body)
     Bot.send_message(chat_id=os.getenv('MYUSERID'), text=properties)
+    channel.basic.ack(delivery_tag=method.delivery_tag)
 async def main():
     with get_connection() as connection:
         with connection.channel() as channel:
