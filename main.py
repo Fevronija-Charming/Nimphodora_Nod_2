@@ -306,10 +306,12 @@ async def proverka_zapisi(message: types.Message):
         id_zapisi=id_zapisi+1
         await message.answer(text="Запись успешно внесена")
 def process_message(channel,method,properties,body):
-    Bot.send_message(chat_id=os.getenv('MYUSERID'),text=channel)
-    Bot.send_message(chat_id=os.getenv('MYUSERID'), text=method)
-    Bot.send_message(chat_id=os.getenv('MYUSERID'), text=body)
-    Bot.send_message(chat_id=os.getenv('MYUSERID'), text=properties)
+    asyncio.run(process_message2(channel,method,properties,body))
+async def process_message2(channel, method, properties, body):
+    await Bot.send_message(chat_id=os.getenv('MYUSERID'),text=channel)
+    await Bot.send_message(chat_id=os.getenv('MYUSERID'), text=method)
+    await Bot.send_message(chat_id=os.getenv('MYUSERID'), text=body)
+    await Bot.send_message(chat_id=os.getenv('MYUSERID'), text=properties)
     channel.basic.ack(delivery_tag=method.delivery_tag)
 async def main():
     with get_connection() as connection:
