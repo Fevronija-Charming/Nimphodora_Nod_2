@@ -315,8 +315,7 @@ async def main():
     with get_connection() as connection:
         with connection.channel() as channel:
             channel.queue_declare(queue='PLATOKY2', durable=False)
-            channel.basic_consume
-            on_message_callback_query(on_message_callback=process_message, queue='PLATOKY2')
+            channel.basic_consume(on_message_callback=process_message, queue='PLATOKY2')
             channel.start_consuming()
             async with broker:
                 await broker.start()
