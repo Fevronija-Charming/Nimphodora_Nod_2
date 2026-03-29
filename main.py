@@ -306,6 +306,8 @@ async def proverka_zapisi(message: types.Message):
         id_zapisi=id_zapisi+1
         await message.answer(text="Запись успешно внесена")
 def process_message(channel,method,properties,body):
+    asyncio.create_task(process_message2)
+async def process_message2(channel,method,properties,body):
     Bot.send_message(chat_id=os.getenv('MYUSERID'),text=channel)
     Bot.send_message(chat_id=os.getenv('MYUSERID'), text=method)
     Bot.send_message(chat_id=os.getenv('MYUSERID'), text=body)
