@@ -326,4 +326,4 @@ async def main():
         await dp.start_polling(Bot) 
 if __name__ == "__main__":
     asyncio.run(main())
-    krolik()
+    asyncio.run(krolik())
