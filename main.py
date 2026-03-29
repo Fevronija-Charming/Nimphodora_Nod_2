@@ -313,9 +313,9 @@ def process_message(channel,method,properties,body,Bot:Bot):
 async def main():
     with get_connection() as connection:
         with connection.channel() as channel:
-            channel.queue_declare(queue='PLATOKY2', durable=True)
+            channel.queue_declare(queue='PLATOKY2', durable=False)
             channel.basic_consume
-            on_message_callback_query(on_message_callback=process_message, queue='PLATOKY2', no_ack=True)
+            on_message_callback_query(on_message_callback=process_message, queue='PLATOKY2')
             channel.start_consuming()
             async with broker:
                 await broker.start()
