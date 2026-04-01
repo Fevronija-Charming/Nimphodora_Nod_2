@@ -305,19 +305,20 @@ async def proverka_zapisi(message: types.Message):
         fakt_zapisi=0
         id_zapisi=id_zapisi+1
         await message.answer(text="Запись успешно внесена")
-def process_message(channel,method,properties,body):
-    print(body)
-    print(properties)
-    print(channel)
-    print(method)
-    channel.basic_ack(delivery_tag=method.delivery_tag)
-    channel.close()
-def krolik():
-    with get_connection() as connection:
-        with connection.channel() as channel:
-            channel.queue_declare(queue='PLATOKY2', durable=False)
-            channel.basic_consume(on_message_callback=process_message, queue='PLATOKY2')
-            channel.start_consuming()
+#реализация через faststream
+#def process_message(channel,method,properties,body):
+    #print(body)
+    #print(properties)
+    #print(channel)
+    #print(method)
+    #channel.basic_ack(delivery_tag=method.delivery_tag)
+    #channel.close()
+#def krolik():
+    #with get_connection() as connection:
+        #with connection.channel() as channel:
+            #channel.queue_declare(queue='PLATOKY2', durable=False)
+            #channel.basic_consume(on_message_callback=process_message, queue='PLATOKY2')
+            #channel.start_consuming()
 async def main():
     async with broker:
         await broker.start()
@@ -326,4 +327,5 @@ async def main():
         await dp.start_polling(Bot) 
 if __name__ == "__main__":
     asyncio.run(main())
-    asyncio.run(krolik())
+    #реализация через faststream
+    #asyncio.run(krolik())
